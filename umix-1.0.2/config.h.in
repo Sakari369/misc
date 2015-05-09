@@ -1,0 +1,99 @@
+/* config.h.in.  Generated from configure.in by autoheader.  */
+/* Default mixer device used */
+#undef DEF_DEVICE_PATH
+
+/* Define this if you have the ncurses libs */
+#undef HAVE_NCURSES
+
+/* Define this if you want the dummy driver for debugging */
+#undef HAVE_DUMMY
+
+/* Define this if you have the Open Sound System (OSS) */
+#undef HAVE_OSS
+
+/* Define this if you want debug information to be included */
+#undef UMIX_DEBUG
+
+/* Define this if you want profiling information to be included */
+#undef UMIX_PROFILE
+
+/* Define if your locale.h file contains LC_MESSAGES.  */
+#undef HAVE_LC_MESSAGES
+
+/* Define to 1 if NLS is requested.  */
+#undef ENABLE_NLS
+
+/* Define as 1 if you have catgets and don't want to use GNU gettext.  */
+#undef HAVE_CATGETS
+
+/* Define as 1 if you have gettext and don't want to use GNU gettext.  */
+#undef HAVE_GETTEXT
+
+/* Define as 1 if you have the stpcpy function.  */
+#undef HAVE_STPCPY
+
+/* path to the default config file. */
+#undef DEF_CONFIG_DIR
+
+/* path to the default mixer device. */
+#undef DEF_DEVICE_PATH
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <getopt.h> header file. */
+#undef HAVE_GETOPT_H
+
+/* Define to 1 if you have the `getopt_long' function. */
+#undef HAVE_GETOPT_LONG
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Version number of package */
+#undef VERSION

@@ -1,0 +1,338 @@
+.\" $Id: umix.1,v 1.3 2003/02/09 09:35:45 sakari Exp $
+.\"
+.\" Manual page for umix. See README for more information.
+.\" Copyright (C) 2002 Sakari Lehtonen <sakari@ionstream.fi>
+.\"
+.\"
+.TH "UMIX" 1 "08 Jun 2002" "" "Sound Utilities"
+.SH "NAME"
+umix \- adjust soundcard mixers
+.SH "SYNOPSIS"
+.B umix
+.RI [ \|channel\|\ volume\| | \|left:right ]\c
+.RB [ R | P ]\c
+.RB [\| + | - \|]
+.IR device \|]
+.RB [\| \-r
+.IR driver \|]
+.RB [\| \-f
+.IR configpath \|]
+.RB [\| \-ghilqsv \|]
+.SH "DESCRIPTION"
+.B umix
+is a program for adjusting soundcard mixers.
+With it you can adjust your soundcard volumes, balances and
+recording sources.
+It can be used flexibly from the command-line,
+or from an interactive user interface.
+
+You can save your soundcard volumes to a file, and load them
+afterwards, for example when when booting the machine.
+
+Channel names are used to specify the volume you want to
+adjust. You can check what channels are supported with the 
+.B -q
+option. Channel names can also be shortened if they have enough
+distinctive letters to identify the channel, eg. 'volume' can be 
+shortened to 'vol'. If channel name is specified as
+.I all
+, all available channels are set to the specified value.
+
+For each
+.I channel
+specified,
+.I volume
+is the volume you want to set, with both left
+and right specified as the same, or in
+.IR left : right
+format.
+
+You can also specify optional
+.BR + \ or \ -
+after the
+.I volume
+for increasing or decreasing the volume for
+.BR channel ,
+with amount
+.IR volume .
+The optional
+.BR R \ or \ P
+at the end of the
+.I channel
+argument sets the
+.I channel
+as a current recording source or normal play, respectively.
+You can use both upper- and lowercase letters.
+
+You can slide volumes smoothly in steps from one point to another.
+The format is following:
+.IR startvol , endvol , steps , delay .
+Here
+.I startvol
+is the volume you want to slide the volume from, and
+.I endvol
+is the volume you want to increase or decrease in steps to. 
+Optional parameter
+.I steps
+specifies the number of steps between the two volumes, and
+.I delay
+the delay between two steps. Default values for
+.I steps
+is 20, and 20ms for
+.IR delay .
+The optional
+.BR + \ or \ -
+have no effect when sliding volumes.
+
+The
+.I delay
+can be between 0 and 5 seconds, specified in milliseconds.
+Maximum value for 
+.I steps 
+is the difference between the starting
+and destination volume, so that the minimum raise or decrease in one 
+step is always 1.
+
+All volume settings are parsed the same, so you can use sliding in your
+config file too, you just have to edit the config manually.
+For example the line
+
+pcm 0,100,25,50
+
+in your config file would slide the volume of 'pcm' from 0 to 100
+in 25 steps and with a 50 ms delay when loading settings.
+
+Umix needs read and write permissions to the mixer device. I suggest
+that you create a group for this and change permissions
+so that group has write and read access to the devices, then
+add necessary users to that group.
+
+.SH "OPTIONS"
+.TP
+.B \-q, \-\-query
+Query and print all active channel volumes and stats from
+all available devices. Interactive UI is not started.
+.TP
+.B \-l, \-\-load
+Load previously saved settings from
+.IR configpath .
+If
+.I configpath
+is specified as '-', settings are loaded from
+standard input. Clears the
+.BR \-i
+option.
+.TP
+.B \-s, \-\-save
+Save current mixer settings to
+.IR configpath .
+If
+.I configpath
+is specified as '-', settings are printed to
+standard output. Clears the
+.BR \-i
+option.
+.TP
+.BI \-f\  configpath ,\ \-\-file= configpath
+Specify the file used to read and save settings.
+Defaults to
+.IR /etc/umixrc .
+Sets the
+.BR \-i
+option.
+.TP
+.BI \-d\  device ,\ \-\-device= device
+Specify the device used. Defaults to
+.IR /dev/mixer .
+Sets the
+.BR \-i
+option.
+.TP
+.BI \-r\  driver ,\ \-\-driver= driver
+Specify the driver used. Defaults to
+.IR OSS .
+Sets the
+.BR \-i
+option.
+.TP
+.B \-i, \-\-interactive
+Start interactive user interface after processing
+non-interactive command-line options. 
+.TP
+.B \-g, \-\-globals
+Print current global options. This is useful for finding out what
+is the default device etc.
+.TP
+.B \-h, \-\-help
+Display help and exit.
+.TP
+.B \-v, \-\-version
+Display version information and exit.
+.SH "EXAMPLES"
+.TP
+.B umix\ \-q
+Prints all volumes of active channels and their stats.
+The output should be self\-explanatory.
+.TP
+.BI umix\  volume\ 100 \  bass\ 88 \  treble\ 80 \  pcm\ 94
+Sets the volume to 100, bass to 88,
+treble to 80 and PCM to 94.
+.TP
+.BI umix\  vol\ 100 : 80 \  syn\ 90 : 30
+Here channel names are shortened and stereo settings are used.
+Sets volume`s left to 100, right to 80 and synth`s
+left to 90 and right to 30.
+.TP
+.BI umix\  bass\ 20- \  pcm\ 20 : 10+ \  ogain\ 40 : 45-
+Here volumes are incremented or decremented from their
+original values. Decreases bass by 20, increases
+PCM`s left by 20 and right by 10 and the last one
+decreases output gain`s left by 40 and right by 45.
+.TP
+.BI umix\  mic\ R \  synth\ 20P \  line\ 10p-
+This sets the mic as a recording source,
+synth as normal play with volume 20 and line
+as normal play with volume decreased by 10.
+.TP
+.BI umix\  pcm\ 0,60,30,25 \  vol\ 100,70 \  synth\ 50:50,25:50
+Here sliding is demonstrated. The first slides pcm from 0 to 60
+with 30 steps and a 25 ms delay, then slides vol from 100 to 70 with
+default steps and delay and the last one slides synth from 50:50 to
+25:50. 
+.TP
+.BI umix\ \-f \ /some/path/umixrc \ \-l
+Here the config path is specified as
+.I /some/path/umixrc
+and settings are loaded from that file.
+.TP
+.BI umix\ \-d \ /dev/mixer2 \ \-f \ /somepath/umsettings
+The device that is used for mixing is specified as
+.IR /dev/mixer2 ,
+config path is set as
+.I /somepath/umsettings
+and the interactive user interface is automatically
+started, because.
+.BR \-f \ and \ \-d
+set the
+.BR \-i
+option.
+.SH "NCURSES USER INTERFACE"
+The (n)curses based user interface. Designed to be used
+from a console or x-terminal.
+.SS "USAGE"
+On the left side is the channel menu, which consists of
+channel names, stats and volumes.
+On the right side is the balance menu.
+The currently chosen channel is indicated with highlighting
+its name and drawing arrows around the chosen menu.
+You can move around with default
+.BR vi / emacs / arrow \ keys.
+
+Moving up and down selects the current channel, moving
+left and right adjusts the volume or balance,
+depending on which menu you are in.
+.B Tab
+toggles between volume and balance menus.
+
+If the channel does not support stereo mixing
+(it`s left and right values cannot differ), then a
+.BR '|'
+at center of the balance is drawn.
+.SS "KEY BINDINGS"
+.TP
+.BR j \ / \ ^n \ / \ arrow\ down
+Move down.
+.TP
+.BR k \ / \ ^p \ / \ arrow\ up
+Move up.
+.TP
+.BR h \ / \ ^b \ / \ arrow\ left
+Decrease volume / balance left.
+.TP
+.BR l \ / \ ^f \ / \ arrow\ right
+Increase volume / balance right.
+.TP
+.BR ] \ / \ .
+Increase volume by fifth of maximum amount.
+.TP
+.BR [ \ / \ ,
+Decrease volume by fifth of maximum amount.
+.TP
+.B Tab
+Toggle between volume and balance menus.
+.TP
+.B Space
+Toggle play / record source.
+.TP
+.B L
+Load settings.
+.TP
+.B S
+Save settings.
+.TP
+.B f
+Specify the config path. This presents a dialog in the lower
+border. If no string is given, the path remains unchanged.
+.TP
+.B e
+Enter channel volume manually for the current channel. 
+Same rules apply as with command-line channel settings, 
+so you can set balances and recording sources too.
+.TP
+.B n
+Cycles through available mixer devices. You can see the currently
+active mixer and the total number of initialized mixers in the
+top border.
+.TP
+.B m
+Mutes all those channels that are not already mute. If pressed
+again, returns volumes back to the state before muting.
+.TP
+.B x
+Excludes the current channel. Same as
+.B m
+but only with the current channel.
+.TP
+.B H
+Displays the help.
+.TP
+.B q
+Exit the program.
+.TP
+.B ^l
+Refresh the screen.
+.SH "CONFIG FILE"
+The config consists of global options and mixer settings.
+Global options come after the keyword
+.BR [global] .
+Global options are read before loading any mixer settings or
+parsing command-line options. Global options are the defaults
+to use if no command-line options are given.
+
+Mixer settings come after the keyword
+.BR [mixers] .
+The mixer device that settings are loaded for is specified with the keyword
+.BR mixer .
+The string after
+.BR mixer=
+is the path of the mixer device. Then comes the settings
+for that mixer. These are parsed like command-line options.
+
+Comments and all other characters are ignored.
+
+.SH "FILES"
+.TP
+.I /etc/umixrc
+The default configuration file.
+.TP
+.I $HOME/.umixrc
+Used as the config file if exists.
+.SH "BUGS"
+When used with terminals that have columns below 35, the output
+is not optimal with the ncurses UI.
+
+If the number of channels is greater than number of lines on screen, you
+cannot adjust channels that exceed the number of lines in the ncurses UI 
+(rare, but to be fixed soon)
+.SH "AUTHOR"
+Sakari Lehtonen <sakari@ionstream.fi>

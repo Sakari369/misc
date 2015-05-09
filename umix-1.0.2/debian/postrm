@@ -1,0 +1,28 @@
+#!/bin/sh
+# umix postrm for debian
+# Copyright (C) 2001 Sakari Lehtonen
+
+set -e
+CONFIG="/etc/umixrc"
+
+case "$1" in
+	remove)
+		if [ -f $CONFIG ]
+		then
+			echo "Remove $CONFIG manually if needed,"
+			echo "or use dpkg --purge umix"
+		fi
+		;;
+	purge)
+		if [ -f $CONFIG ]
+		then
+			 rm -vf $CONFIG
+		fi
+		;;
+	upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+		;;
+esac 
+
+if test -x /usr/bin/update-menus; then update-menus; fi
+
+exit 0

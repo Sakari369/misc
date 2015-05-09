@@ -1,0 +1,49 @@
+- I don't know why, but in the ncurses UI when muting some channels in the third device 
+  and using the dummy driver, Umix segfaults. Investigate and fix.
+
+- New way of thinking muted channels .. store their volumes, but set a flag
+  that tells that the current channel is muted .. pretend we are using hardware
+  mute or something .. OSS doesn`t support his AFAIK, but ALSA might. Do it
+  so that you could mute/unmute channels while still storing their previous
+  values .. this would require some kikkailu / reading config files at
+  startup.
+
+- ALSA driver (no proper library API documentation available .. the one found
+  at www.alsa-project.org is not up to date .. this is IMO the weakest part of
+  ALSA at the moment, the driver is much better than OSS technically)
+
+- The functions and structures etc still need some definement to work more
+  dynamically with example ALSA and other drivers.
+
+- Enable i18n .. Umix should be i18n compatible already, and it was enabled
+  at some point .. but disabled for now because it requires some tweaking
+  with gettext and hmm ahh yes, translations!
+
+- New configuration saving/loading model .. more general so that different
+  parts of the program can save and load sections from the config file etc..
+  like with xmms. Perhaps implement using an existing configuration library.
+
+- Fixing of FreeBSD compilation .. apparently no linking with ld is necessary
+  and sys/soundcard.h does not define all structures etc .. not sure. Maybe
+  someone could help me with this.
+
+- Add support for special functions like setting the 3DSE etc. This could be
+  implemented as a more general function/callback support system, so that
+  special functions of soundcards like SBLive could be supported and implemented
+  independent of drivers. Especially try to implement easy setting of 
+  modes between 2 speaker and headphone speaker settings. This should be
+  already possible with SBLive I think ..
+
+- Maybe use linked lists instead of static arrays of pointers in many places.
+
+- Scrolling of channels in ui_ncurses if number of channels is greater 
+  than number of lines on screen.
+
+- Maybe implement a feature that enables specific volumes not going accidentally
+  over some level (very annoying when you accidentally set volume and pcm
+  to 100 while playing some music, ugh!) This needs some simple rules
+  definitions. Maybe a new [limits] option to config file ?
+
+- *BSD native drivers and testing (FreeBSD 4.2 tested, no native driver)
+
+- *BSD ports

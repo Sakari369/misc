@@ -1,0 +1,46 @@
+#! /bin/sh
+# 
+# mixer    Save/restore mixer settings on bootup
+# Thanks to Leon Breedt <ljb@debian.org> for this.
+#
+# Modified by Sakari Lehtonen <sakari@ionstream.fi> to work with multiple
+# mixers (well, at least with aumix and umix).
+#
+
+NAME=mixer
+CONF=/etc/umixrc
+PROG=/usr/bin/umix
+MIXER=umix
+
+[ -x $PROG ] || exit 0
+
+if [ -x /etc/init.d/alsa ]; then
+    alsactl='(alsactl not found)'
+    eval `grep '^alsactl=' /etc/init.d/alsa | head -1`
+    if [ -x $alsactl ]; then
+        echo "ALSA detected, so $MIXER will not touch the mixer settings."
+        exit 0
+    fi
+    echo "ALSA detected, but $alsactl not usable, carrying on with $MIXER."
+fi
+
+case "$1" in
+    start|restart|reload|force-reload)
+        if [ -f $CONF ]; then
+            echo -n "Restoring mixer settings: "
+            $PROG -f $CONF -L >/dev/null
+            echo "done."
+        fi
+        ;;
+    save|stop)
+        echo -n "Saving mixer settings: "
+        $PROG -f $CONF -S 2>&1 >/dev/null
+        echo "done."
+        ;;
+    *)
+        echo "Usage: /etc/init.d/$NAME {start|stop|save}" 
+        exit 1
+        ;;
+esac
+
+exit 0

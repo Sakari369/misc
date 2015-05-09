@@ -1,0 +1,142 @@
+dnl $Id: configure.in,v 1.8 2003/08/30 15:33:57 sakari Exp $
+dnl 
+dnl Process this file with autoconf to generate a configure script
+dnl this file is part of the Umix package, see README for more info
+dnl Aikamoista saatoa (TM)
+
+AC_INIT(src/umix_common.c)
+AM_INIT_AUTOMAKE(umix, 1.0.2)
+AM_CONFIG_HEADER(config.h)
+
+dnl default programs
+AC_PROG_CC
+AC_PROG_INSTALL
+AM_PROG_LIBTOOL
+
+dnl i18n
+dnl ALL_LINGUAS="fi"
+dnl AM_GNU_GETTEXT
+
+dnl check for getopt long
+AC_CHECK_HEADERS(getopt.h)
+AC_CHECK_FUNCS(getopt_long)
+
+dnl default mixer device
+case "$host_os" in
+	*linux*) 
+		dnl TODO: check for devfs 
+		def_mixer_dev="/dev/mixer"
+		;;
+	*)
+		def_mixer_dev="/dev/mixer"
+		;;
+esac
+dnl Conditional stuff
+AC_SUBST(umix_CONDOBJS)
+umix_CONDOBJS=""
+
+dnl default mixer path to use 
+AC_ARG_WITH(mixer_dev,
+[  --with-mixer-dev=path   path to the default mixer device],
+	mixer_dev="$withval", mixer_dev="$def_mixer_dev")
+
+AC_DEFINE_UNQUOTED(DEF_DEVICE_PATH, "$mixer_dev",
+[path to the default mixer device.])
+
+dnl default config dir to use, set with --sysconfdir
+dnl this is a hack, to avoid sysconfdir becoming literally '$sysconfdir'
+if test "$sysconfdir" = '${prefix}/etc'
+then
+	sysconfdir="/etc"
+fi
+AC_DEFINE_UNQUOTED(DEF_CONFIG_DIR, "${sysconfdir}",
+[path to the default config file.])
+
+dnl OSS support
+AC_ARG_ENABLE(oss,
+[  --disable-oss           disable OSS mixer driver [default=no]],,
+	enable_oss="yes")
+
+if test "x$enable_oss" = "xyes"
+then
+	AC_CHECK_HEADER(sys/soundcard.h, [have_oss=yes], [have_oss=no])
+	AC_DEFINE(HAVE_OSS)
+	umix_CONDOBJS="$umix_CONDOBJS driver_oss.o"
+else
+	have_oss=no
+fi
+
+dnl Dummy mixer support
+HAVE_DUMMY="no"
+AC_SUBST(HAVE_DUMMY)
+AC_ARG_ENABLE(dummy,
+[  --enable-dummy          enable dummy mixer driver [default=no]],,
+	enable_dummy="no")
+if test "x$enable_dummy" = "xyes"
+then
+	AC_DEFINE(HAVE_DUMMY)
+	umix_CONDOBJS="$umix_CONDOBJS driver_dummy.o"
+fi
+
+dnl ncurses UI support
+AC_ARG_ENABLE(ncurses,
+[  --disable-ncurses       disable ncurses user interface [default=no]],,
+	enable_ncurses="yes")
+if test "x$enable_ncurses" = "xyes"
+then
+	AC_CHECK_LIB(ncurses, initscr, NCURSLIB="ncurses", NCURSLIB="")
+	if test "x$NCURSLIB" = "x"
+	then
+		AC_CHECK_LIB(curses, initscr, NCURSLIB="curses", NCURSLIB="")
+	fi
+fi
+if test "x$NCURSLIB" != "x"
+then
+	AC_SUBST(NCURSLIB)
+	have_ncurses="yes"
+	AC_DEFINE(HAVE_NCURSES)
+	LIBS="$LIBS -l$NCURSLIB"
+	umix_CONDOBJS="$umix_CONDOBJS ui_ncurses.o"
+else
+	have_ncurses="no"
+fi
+
+dnl debug information 
+AC_ARG_ENABLE(debug,
+[  --enable-debug          enable debug information [default=no]],,
+	enable_debug="no")
+if test "x$enable_debug" = "xyes"
+then
+	AC_DEFINE(UMIX_DEBUG)
+fi
+
+dnl profiling
+dnl AC_ARG_ENABLE(profile,
+dnl [  --enable-profile        enable profile information [default=no]],,
+dnl 	enable_profile="no")
+dnl if test "x$enable_profile" != "x"
+dnl then
+dnl 	AC_DEFINE(UMIX_PROFILE)
+dnl 	OPTFLAGS="$OPTFLAGS -pg"
+dnl fi
+
+CFLAGS="$CFLAGS -Wall"
+
+AC_OUTPUT(Makefile doc/Makefile src/Makefile)
+
+echo ""
+echo "Configuration:"
+echo "  Install path:                   ${prefix}"
+echo "  Build OSS support:              $have_oss"
+echo "  Build Dummy mixer driver:       $enable_dummy"
+echo "  Build Ncurses UI:               $have_ncurses"
+echo "  Enable debug information:       $enable_debug"
+echo "  Default config path:            $sysconfdir"
+echo "  Default mixer device:           $mixer_dev"
+
+if test "x$enable_debug" = "xyes"
+then
+	echo "Debug information:"
+	echo "CFLAGS: $CFLAGS"
+	echo "LIBS: $LIBS"
+fi

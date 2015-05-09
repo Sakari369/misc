@@ -1,0 +1,427 @@
+Version 1.0.2 - Sat, 30 Aug 2003
+================================
+General:
+- Fixed bug in mixer_common.c that caused the ncurses UI to display the 
+  wrong device but with the wrong channel numbers when saving or loading 
+  settings. This bug was introduced in 1.0.1 because I didn't test enough
+  when I changed the inverted loops to normal. This happened because the
+  current mixer wasn't reserved when returning from the settings_save() or
+  settings_load() functions, now it is.
+- Fixed a bug that could have caused segmentation fault when Umix quits.
+  mixer_close() was free():ing something that cannot be freed, this leads back
+  to when I removed plugins and didn't check this.
+  Again, thanks to Andrew B. Collier for helping.
+Ncurses UI:
+- Cleaned code up (somewhat) and moved stuff to their own functions. 
+
+Version 1.0.1-1 - Tue, 26 Aug 2003
+==================================
+General:
+- Fixed a stupid double semicolon in mixer.c, should now build with gcc
+  version 2.9.x. Thanks to Andrew B. Collier for reporting this. Nothing else
+  changes, just this and the source tarball version number.
+
+Version 1.0.1 - Sat, 23 Aug 2003
+================================
+General:
+- The default mixer device is again '/dev/mixer', I changed it back at some 
+  point but don't remember when. Use 
+  `./configure --with-mixer-dev=/dev/sound/mixer' if you are using devfs.
+- Changed the saving settings message.
+- Moved stuff in umix.c to their own functions. 
+- General code cleanup. 
+- Fixed an off-by-one bug in the oss driver when updating values from the
+  mixer which might have caused passing the wrong parameter to ioctl.
+- Updated the test() function.
+Packages:
+- Fixed Debian package version number in debian/changelog, was 0.9.1, now
+  1.0.1.
+- Updated Gentoo ebuild from the portage tree.
+
+Version 1.0 - Sat, 08 Feb 2003
+==============================
+General:
+- Removed plugin system
+- Removed GTK+2 and Gnome2 UI's.
+- This release is basically the thing I originally wanted to write, a simple
+  replacement for Aumix. You can set the volumes from the command line or
+  from a ncurses UI. Removed all unnecessary stuff. I have no interest in this
+  project anymore, so I'm just releasing this out .. maybe someone will need
+  a simple commandline volume mixer for OSS..
+- Fixed some bugs
+- This is the final release, I am no longer working on this thing.
+
+Version 0.9.3 - Not released
+================================
+Gnome2 UI:
+- First revision
+- Basically just a Gnome2fication of the GTK+2 UI, with code cleanups. This
+  will probably replace the GTK+2 UI, or I will first complete the Gnome2
+  UI and then branch of a version that only uses GTK+2.
+GTK+2 UI:
+- The about dialog now uses the stock gtk_about_dialog().
+Ncurses UI:
+- Updated the code to use the new chan_toggle_mute() function.
+General:
+- Fixed the setting of sysconfdir with `./configure --sysconfdir=path', so
+  that the config file is now installed to the right directory. Thanks to	
+  Svend Sorensen for reporting this.
+- Added helper function chan_toggle_mute() to toggle the mute status of
+  the current channel.
+- Moved pixmaps to ui/pixmaps so that all UI's can share them.
+- Umix homepages have now moved to SourceForge.Net! The new URL is
+  http://umix.sf.net/, so check it out. Also set up the CVS tree,
+  so you can download up to date versions of Umix if you have absolutely 
+  nothing better to do! Woot! Getting used to CVS, and I like it :)
+- Updated the autogen.sh script to do all the necessary configuration to
+  enable building from the cleaned up CVS tree.
+- Commandline options are now passed to the UI's with argc and argv.
+- General code cleanup all over the place.
+- Moved command line parsing code to their own functions
+  parse_cmdlineopts and parse_cmdlinevols.
+- Restructured mixer initializing so that UI's now init the mixers, so that
+  each UI can show their own error messages.
+- Restructured most of the umix.c code.
+- Functions mixers_init() and plugins_init() now save the state if mixers
+  or plugins have been already initialized.
+
+Version 0.9.2 - Mon, 16 Sep 2002
+================================
+GTK+2 UI:
+- Cleaned up the preferences window for now, will include more options in
+  the future.
+Documentation:
+- Changed 'deprecated' to 'shortened' in the man page when speaking about 
+  channel names. Must have been braindamage or something ..
+General:
+- Added option --with-mixer-dev=path to set the default mixer device path 
+  to the configure script. NOTE: the default mixer device w/ Linux is now 
+  /dev/sound/mixer instead of /dev/mixer. If you don't use devfs, use
+  `./configure --with-mixer-dev=/dev/mixer'.
+- Update the gentoo ebuild to depend on the USE flag "gtk2", not "gtk".
+- Fixed so that compiling with --disable-gtk actually works if you don't have 
+  GTK+2 gdk-pixbuf-csource installed.
+- Tweaked the --help output to fit in 24 lines. 
+- Moved volume sliding code to it's own function slidevol() in umix_common.c.
+- Renamed all mixer drivers from mixer_whatever.c to driver_whatever.c to 
+  clarify the difference between mixer.c and the drivers.
+- Umix ebuild is now included in the Gentoo portage tree, so replaced the one 
+  I made with the one in the portage tree.
+
+Version 0.9.1 - Sat, 13 Jul 2002
+================================
+GTK+2 UI:
+- Added global options to the preference dialog.
+- Added preferences dialog.
+- Added settings loading and saving options to the menu.
+- Record sources now update dynamically, and allow more than one channel to
+  be a recording source.
+- Fixed the slight change of sliders that had been happening after when 
+  changing volumes.
+- Restructured the channel creation code so that invividual channels can be
+  shown and hidden more easily.
+- The pixmaps are now converted from .png files to .h with gdk-pixbuf-csource.
+  Removed the old support code for showing pixmaps and rewrote to use the new
+  gdk-pixbuf way.
+- Checked and changed code to not use deprecated GTK+ functions or definitions
+  and defined -DGTK_DISABLE_DEPRECATED etc in Makefile.am.
+- Restructured the preferences window code in prefs.c
+- The main menu now uses GTK stock items and added more keyboard shortcuts.
+- Added left and right speaker pixmaps to the balance adjustment 
+  to clarify it`s meaning. 
+- Changed to show volume values beside the sliders instead of
+  in the statusbar.
+OSS mixer driver:
+- Internal record stat flags were not updated when oss_is_recsrc() was called,
+  causing flags not to be up to date and chan_is_recsrc() returning wrong values
+  if another process changed the record states. Now record states are updated
+  correctly with the interactive ui's.
+General:
+- The GTK+2 GUI is now built by default.
+- Now includes a Gentoo build script. I`ve used Gentoo since February, and
+  it's great !
+- Fixed the forcing of specific compiler -O options during build.
+- Capitalized all first letters in error messages for consistency.
+- Added helper function chan_toggle_rec() to toggle recording state of the
+  current channel and made UIs use it.
+- Moved commandline volume parsing to function parse_cmdlinevols().
+- Checked all own defines that might cause confusion to be prefixed with UMIX_.
+- Defined all general setting loading/saving error strings in ui.h so that 
+  the same error strings can be easily used in different UI's.
+- Renamed savesettings()/loadsettings() to settings_save()/settings_load().
+- Changed so that the commandline option `--globals' can be used even if 
+  initializing of mixers or plugins fails.
+- Rewrote the plugin handling code to be more verbose when errors happen.
+- Renamed addnv() to nv_add() and lookupbyname() to nv_lookupbyname().
+- Fixed in nv_lookupbyname() to return the val of the indexed
+  name, that was searched, not the whole nameval structure. Don`t know when 
+  I screwed this up, or was it always like this.
+
+Version 0.9.0 - Sat, 08 Jun 2002
+================================
+- Now includes a GTK+2 user interface! Not yet fully ready, doesn`t support
+  multiple mixers for example, but should be good enough for single mixer
+  use. This is for testing ATM, use `configure --enable-gtk' to build it,
+  and specify the ui as 'gtk' in the configuration file, or use the command
+  line option '-u', eg. `umix -u gtk'.
+- Rewrote most parts of the volume API, now uses volume/balance values
+  instead of left/right values. Volumes and balances are now handled 
+  independently of each other inside the mixer drivers, and are float values
+  instead of integer. Added functions chan_get_bal(), chan_set_bal(), 
+  chan_inc_bal() for balance control and chan_get_vb(), chan_set_vb() to 
+  get/set both volume and balance values at once. Functions chan_*_bal() and
+  chan_*_vol() now return a single float value, chan_get_vb() return the new
+  volume structure that is consisted of volume and balance ATM. Also added
+  functions lr_to_vb() and vb_to_lr() to convert between left/right and vol/bal
+  values. 
+- Rearranged the commandline option ordering when displaying help to be more
+  logical.
+- Rewrote most of the plugin loading and handling code. Added commandline
+  option `-n, --listplugins' to display all available plugins.
+- Renamed configure.ac back to configure.in again .. wtf is the difference
+  between these two, beats me. With configure.ac I get random errors, and
+  much slower processing, with configure.in everything works .. the .ac 
+  seems to require the newer autoconf/automake versions too, so I`m sticking
+  with configure.in for now on.
+- Added function chan_set_mute() to mute or unmute a channel. This removes
+  the need for storing the volumes in interactive UIs.
+- The ncurses UI doesn`t anymore need to store balances itself, so removed
+  some functions and rewrote parts of it.
+- Added an about screen to the ncurses UI and specified version numbers for
+  the UI`s.
+- Added some *bsd checking to mixer_oss.c when trying to include the OSS 
+  headers.
+- Fixed a bound checking bug in the OSS mixer driver when setting channels.
+- Added functions get_version_str() and init_version() to umix_common.c 
+  that returns the formatted version string. Changed curses and gtk UIs to 
+  use this.
+- Commented out all chan_*_elem() function related code, because this is
+  not used ATM.
+- Rewrote most of configure.ac, should behave better now. The inner workings
+  of autoconf/automake are still black magic to me .. the 1.5 and 2.5
+  version differences too. Use of acconfig.h now seems to be deprecated with
+  new versions of automake/autoconf, but I`m too lazy ATM to understand why. 
+  Seems like a big mess ..
+- Changed ui_ncurses documentation "Move left/right" to "Increase/Decrease
+  volume / balance".
+
+Version 0.8.3 - Thu, 21 Feb 2002
+================================
+- Added more error checking to commandline options handling.
+- Changed the structure of plugin building, every plugin is now in it's own
+  directory, and built independently.
+- Moved umix_error.[ch] to be independent of Umix, and renamed to 
+  error.[ch].
+- Added the GPL v2 license banner to all .c and .h files. 
+- Made error reporting make more sense when loading settings.
+
+Version 0.8.2 - Fri, 30 Nov 2001 
+================================
+- Added support for raising and lowering the volume in steps, I am using the
+  term sliding about this. Can be used like normal volume setting, and works 
+  with loading/saving settings etc.
+- Updated man page about sliding volumes.
+- Moved all temporary static variables that are not global to normal variables.
+- Added overflow checking to channel parsing.
+- Removed the word "advanced" from all descriptions. This is just a program
+  for setting the volumes, nothing so advanced about it. 
+- Fixed record source updating when toggling record sources with space in
+  ui_ncurses. The record source was changed but no status updating was 
+  done .. doh.
+- Changed so that when entering values with 'e' in ui_ncurses, nothing will 
+  be done if only enter is pressed.
+- Now includes Slackware build script (tested with Slackware 8.0)
+- Restored NEWS, includes release notes.
+
+Version 0.8.1 - Tue, 13 Nov 2001
+================================
+- Documented the special channel name 'all' in the man page and fixed some 
+  errors.
+- Checked all printed strings for missing i18n _("") macro and added if missing.
+- Changed `umix -blaa` to `program_name -blaa' when suggesting 
+  commandline syntax. 
+- Removed unnecessary volume clamping in parsechanopt(), all volumes are
+  clamped in chan_set_vol() anyway.
+- Converted the TODO file to a more readable format, and changed ChangeLog a
+  bit too.
+- Moved all integer constant #define's to enums, removed enum names and added 
+  more comments.. I use enumerations because they make more sense than defining 
+  constant values as macros, and because it is recommended in 
+  "The practice of programming" by Kernighan and Pike :-).
+- Fixed record source updating when entering values with 'e' in ui_ncurses.
+- Fixed return value checking when loading settings, now reports error
+  messages correctly if loading fails. 
+- Changed so that if loading [global] settings fails, no errors are reported.
+  This would report bogus errors when the default /etc/umixrc doesn't exist.
+- Loading settings now stops parsing the file if binary/garbage is detected,
+  and reports that binary is detected.
+
+Version 0.8.0 - Mon, 05 Nov 2001
+================================
+- Major rewrite. Now uses a function based API to access the mixer interfaces. 
+  All mixer driver information is kept private behind the API. 
+  Almost everything was rewritten somehow, this should allow better support
+  for different mixer drivers like ALSA etc .. at least I hope so :)
+- New way of parsing command line volumes. Volumes are not parsed as command
+  line options, but as channel names so that they can be dynamic depending
+  on what channels are available. Eg. volume is set with `umix volume 100`,
+  not with `umix -v 100` like in the old versions. The volume format also 
+  slightly changed to be more easily parsed, incrementantion now comes after
+  the number eg. `umix pcm 20+ bass 5- treble 5:3+`.
+- Changed all commandline options to lowercase and changed some letters to
+  make more sense, now that volumes aren't set with commandline options. 
+  So check your scripts, -L and -S still work though for loading and saving
+  settings for compatibility reasons.  
+- Moved configure.in to configure.ac .. this may cause some incompatibilities
+  with older autoconf/automake versions, and I am not really sure what the
+  changes are, but I understand this is the proposed way.
+- Ncurses ui now shows the number of available mixers and the current mixer.
+- Renamed "channel" and "volume" when loading settings to "mixer"
+- Fixed the error message to be displayed when entering invalid values
+  in ui_ncurses with 'e'
+
+Version 0.7.2 - Sat, 21 Jul 2001
+================================
+- Added commandline option -G to print current global settings
+- Added an option in ui_ncurses to enter volumes manually
+- Fixed -s and -p to not being swapped when parsing command line options
+- Renamed get_ui_info() to get_ui_func()
+- Changed the error reporting a bit to be more verbose when initializing
+  mixer devices fails.
+- Updated the man page with more information about permissions and plugin
+  directories.
+- Added the mixer interface driver currently used to be displayed with -q
+- Sold my AWE32 and bought a SB Live! Player 1024. OSS sucks with this one,
+  ALSA is much better. I now have one ISA slot free to make 
+  space for my Hardsid :). This lead to a fix with long channel names when
+  querying to justify right.
+- Removed redundant header/lib checks from configure.in
+- Now errorstr() does'nt print strerror(errno) if errno is 0
+- Fixed command line option --ui to work
+
+Version 0.7.1 - Sat, 23 Jun 2001
+================================
+- Renamed all mixerinfo *mixer to mixerinfo *mixinf to clarify meaning
+- Added a hack to check if the current process updated the mixer in 
+  ui_ncurses, will be fixed in future versions
+- Added third mixer device with 32 channels to mixer_dummy to test limits
+- Balance settings in ncurses ui are buggy again due to rereading the mixer
+  settings .. this needs again rewriting the volume structures to use
+  volume and balance instead of left and right ..
+- Changed behaviour of readlevel() to not read left and right specifically, but
+  just read both to the mixer structure directly.
+- Changed the order of parameters passed to writelevel()
+- Fixed comparing of device names in loadsettings(), and changed the format
+  so that instead of mixer names, device paths are now used.
+- Removed ui_gtk from the distribution .. it really is not ready. 
+- Changed the way stuff is scaled in ncurses ui, much better now with 
+  wide terminals etc.
+- Renamed drv* plugins to mixer*, struct mixerdev to mixerfunc and
+  get_driver_info() to get_mixer_func()
+- Changed record flags to be bold in ncurses ui.
+
+Version 0.7.0 - Fri, 08 Jun 2001
+================================
+- Fixed command line volume options overflowing.
+- Added a section about the config file to the man page.
+- Changed error reporting to be more verbose.
+- RPM and Debian package specifications are now included in the source dist.
+- If $HOME/.umixrc exists, it is now used as the config file automatically.
+- Added option -g, --plugindir to specify the directory where plugins
+  are loaded from. Added this option to config file.
+- Combined wrapper.c and error.c to umix_error.c. Changed again some function
+  names and removed unnecessary errorquit_e and errormsg_e.
+- Fixed bug in loading mixer volumes with similar channel 
+  names (line,line1,etc). Thanks to John Waggenspack for reporting this.
+- Moved all common mixer functions from umix_common.c to mixer.c
+- Updated documentation.
+- Rewrote config file format. Now global options and multiple mixer
+  settings can be saved.
+- Added function to mixer interface to check if the mixer has been updated.
+  Now interactive UIs automatically refresh if the mixer has been changed.
+- If options -S or -L are given, no interactive UIs are loaded automatically.
+- When commandline options -D, -d and -u are specified, -I is automatically
+  set. If -q is given, -I has no effect and no UI's are started.
+- All optional drivers and UI's are now dynamically loaded at runtime, like
+  plugins. Changed most parts of the program again.
+- New GTK+ GUI. It needs more work though, and you need to do some hacking 
+  to get it work.
+- Removed internationalization support for the time .. it just messes things
+  up and nobody else really uses Umix anyway or has the need for other
+  languages.
+- Cleaned the code up, changed #define's to enumerations, 
+  changed all mixed upper and lowercase function names and structures 
+  to lowercase.
+- Fixed toggling of record sources 
+- Converted the old ChangeLog format to this.
+- Removed NEWS.
+
+Version 0.6.0 - Mon, 19 Mar 2001
+================================
+- Rewrote mixer structures etc everything. Now support for multiple mixer
+  devices in one session is possible, no stupid global mixer structures. 
+  Ui_ncurses now supports switching between mixer devices when running, and
+  even controlling mixers with different drivers (eg. OSS&ALSA) in one session 
+  should be possible.
+- Changed almost every part of the program.
+- Added multiple device support for the ncurses ui
+- Changed the structure of struct mixerdrv to include the name of
+  the device (eg. Sound Blaster). 
+- Included mixer.h in common.h, added more comments, moved things around.
+- Changed all debug messages to use err_msg(), and added errnoflag
+  to err_msg() and err_quit(), thus removed err_msg_e() and err_quit_e().
+- Changed configure option --disable-curses to --disable-ncurses.
+- Removed unnecessary const when passing parameters to functions
+- Added c_readlevel and c_readall to common.c
+- Fixed compilation with ncurses disabled
+- Added some more comments to the code.
+- Renamed the global `drv` mixer structure to `mixer`. 
+- Moved mixerdrv.[ch] to mixer.[ch]
+
+Version 0.5 - Mon, 19 Feb 2001
+------------------------------
+- Improved error handling, removed colors from ui_ncurses because they suck.
+- The Linux/OSS text based portion of Umix is now pretty much ready .. 
+- Added wrappers for common functions and better error handling.
+- Changed the way input is handled in ui_ncurses, curs_drawborder
+  now uses hline(). Added optional color support in ui_ncurses.
+- Moved #defines from ui_ncurses.h to ui_ncurses.c
+
+Version 0.4 - Sun, 28 Jan 2001
+================================
+- Version 0.4 released. Note that the included fi.po is only for testing,
+  the translation is bad. Need new translations
+- i18n support added, changed or removed lots of stuff. No translations yet,
+  I have a fi.po for testing, but it is not good enough for distribution.
+- New ChangeLog format, date -R and the email address of the author.
+  This allows more detailed ChangeLog entries and separated by contributor.
+  When a new version is ready, it is just announced
+
+Version 0.3 - Tue Jan 23 2001
+================================
+- Lots of misc. fixes
+- Fixed to use getopt if getopt_long is not available
+- Changed the ui_ncurses [] behaviour to change volume max / 5 instead of 
+  volume max 
+- Fixed -D to actually work
+- First public release
+
+Version 0.2 - Tue Jan  9 2001
+================================
+- Fixed ui_ncurses so that changing volumes between muting and unmuting
+  behaves better
+- Started the ALSA driver
+- Changed the way the default driver is determined
+- Fixed documentation to make more sense
+- Added configure option --enable-dummy to enable dummy driver independently
+  without debugging information
+- Added option --driver to choose the mixer driver from the command line
+- Better way to scale in ui_ncurses
+- Fixed ui_ncurses settings loading to reinit VOL and BAL tables
+- Added option to save and load settings to and from `-`
+- Rewrote parts of the top configure.in file
+- Fixed ui_ncurses record source toggling to use the real channel
+
+Version 0.1 - Wed Dec 20 2000
+================================
+- Initial revision 0.1 done, works with Linux/OSS

@@ -1,0 +1,94 @@
+Version 1.0.2
+=============
+Fixed a bug that might have caused segfaulting when quitting, and fixed a bug
+that was introduced in 1.0.1 that caused the ncurses UI to display incorrect
+values when loading or saving settings.
+
+Version 1.0.1
+=============
+Minor bugfixes and updates. Updated Debian packages to build with correct
+version number. You know what they say about final releases..
+
+Version 1.0
+============
+Final version released. Removed plugin code, and unnecessary UIs. This is just
+a simplified commandline and ncurses UI release, as I originally intended. 
+I'm not working on Umix anymore, and this was a test project to begin with.
+
+Version 0.9.3
+=============
+Umix has moved to SourceForge.Net! The new homepage URL is 
+http://umix.sf.net/, check it out now! You can now also access the CVS tree
+via anonymous access. Wow, CVS is the best thing since hmm .. RCS :) !
+
+Version 0.9.2
+=============
+Minor bugfixes and tweaking. Default device with Linux is now /dev/sound/mixer,
+you can use `configure --with-mixer-dev=path' to configure it.
+
+Version 0.9.1
+=============
+GTK+2 user interface is now built by default. Note that the GTK+2 UI is still 
+far from ready, but it is somehow usable by now. More verbose plugin handling 
+and of course bugfixes and general polish.
+
+Version 0.9.0
+=============
+Now includes an experimental GTK+2 user interface! See ChangeLog for details. 
+Rewrote the API again, better plugin handling and general code cleanup.
+
+Version 0.8.3
+=============
+Minor changes to error reporting and plugins are now built independently.
+
+Version 0.8.2
+=============
+Added support for sliding volumes in steps and fixed some bugs. Now with
+Slackware packages too.
+
+Version 0.8.1
+=============
+Code and documentation were polished, and some bugfixes were added.
+
+Version 0.8.0
+=============
+Major rewrite of almost everything, now uses a function based API to access 
+mixer interfaces. New dynamic way of parsing channel options: channels are no 
+longer parsed as commandline options but as channel names. Renamed some 
+commandline options and of course bugfixes.
+
+Version 0.7.2
+=============
+This release includes a new command line option for printing current global 
+settings, a new option to enter volumes manually in ui_ncurses, fixes for 
+command line options -p, -s, and --ui to actually work, and some other minor 
+bugfixes.
+
+Version 0.7.1
+=============
+A new way of scaling stuff in the ncurses UI, a bugfix in loading settings, 
+removal of the GTK UI, a new third mixer device in the dummy driver, and some 
+code cleanups.
+
+Version 0.7.0
+=============
+All optional drivers and UIs are now dynamically loaded at runtime. 
+Configuration file format rewritten so that global options and multiple mixer 
+settings can be saved and loaded.
+
+Version 0.6.0
+=============
+A rewrite for the whole mixer interface, including support for multiple mixer i
+devices in one session, maybe even with different drivers.
+
+Version 0.5
+=============
+Better error handling and various updates.
+
+Version 0.4
+=============
+Internationalization support and some small fixes.
+
+Version 0.3
+=============
+Initial public announcement.

@@ -1,0 +1,2 @@
+?package(umix):needs="text" section="Apps/Sound" title="Umix" \
+ longtitle="Umix" command="/usr/bin/umix"

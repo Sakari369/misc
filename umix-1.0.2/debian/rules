@@ -1,0 +1,73 @@
+#!/usr/bin/make -f
+#
+# $Id: rules,v 1.3 2003/02/09 09:35:44 sakari Exp $
+#
+# Debian rules file for Umix.
+# Based on files by Ian Jackson and James Troup. 
+#
+# Copyright (C) 2002 Sakari Lehtonen <sakari@ionstream.fi>
+#
+
+export DH_COMPAT=2
+package=umix
+debroot=$(PWD)/debian/tmp
+prefix=/usr
+
+build:
+	$(checkdir)
+	./configure --prefix=$(prefix)
+	$(MAKE)
+	touch build
+	
+clean:
+	$(checkdir)
+	-$(MAKE) clean
+	-$(MAKE) distclean
+	-rm -f build
+	-rm -rf $(debroot)
+
+binary-indep: build
+	$(checkdir)
+
+binary-arch: build
+	$(checkdir)
+	install -d $(debroot)/DEBIAN
+	install -m 0755 debian/postinst $(debroot)/DEBIAN
+	install -m 0755 debian/postrm $(debroot)/DEBIAN
+
+	install -d $(debroot)/$(prefix)/bin
+	install -d $(debroot)/$(prefix)/lib/menu	
+	install -d $(debroot)/$(prefix)/share/man/man1
+	install -d $(debroot)/$(prefix)/share/doc/umix
+
+	make prefix=$(debroot)/$(prefix) \
+	mandir="$(debroot)/$(prefix)/share/man" install
+	install -m 0644 debian/menu $(debroot)/$(prefix)/lib/menu/umix
+	strip $(debroot)/$(prefix)/bin/umix
+
+	install -m 0644 README TODO NEWS $(debroot)/$(prefix)/share/doc/umix
+	install -m 0644 ChangeLog $(debroot)/$(prefix)/share/doc/umix/changelog
+	gzip -9v $(debroot)/$(prefix)/share/doc/umix/*
+	install -m 0644 debian/copyright \
+	$(debroot)/$(prefix)/share/doc/umix/copyright
+
+	dpkg-shlibdeps src/umix
+	dpkg-gencontrol
+	
+	chown -R root.root $(debroot)
+	chmod -R go=rX $(debroot)
+	dpkg --build $(debroot) ..
+
+define checkdir
+	test -f debian/rules
+endef
+
+# Below here is fairly generic really
+
+binary:         binary-indep binary-arch
+
+checkroot:
+	$(checkdir)
+	test root = "`whoami`"
+
+.PHONY: binary binary-arch binary-indep clean checkroot

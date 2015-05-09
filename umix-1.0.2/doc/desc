@@ -1,0 +1,5 @@
+Umix is a program for adjusting soundcard volumes and other
+features in soundcard mixers. You can control your volumes, balances and
+recording sources flexibly from the command line or with a ncurses
+user interface with familiar vi/emacs keybindings. Umix supports multiple 
+mixer devices. All settings can be saved and loaded from a file.

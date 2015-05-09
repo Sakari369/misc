@@ -1,0 +1,122 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass article
+\language english
+\inputencoding latin1
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Readme for Umix
+\layout Author
+
+Sakari Lehtonen
+\layout Date
+
+Tue 23, 04/2002
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents{}
+
+\end_inset 
+
+
+\layout Section
+
+What is Umix ?
+\layout Standard
+
+Umix is a program for adjusting soundcard mixers in Linux and other Unices.
+ You can control your volumes, balances and recording sources flexibly from
+ the command line, or with a fullscreen user interface.
+ Umix currently supports Linux, OSS and dummy mixer devices.
+ I designed it as an replacement for Aumix.
+\layout Subsection
+
+How to use Umix ?
+\layout Standard
+
+Read the man-page.
+\layout Subsection
+
+What does Umix mean ?
+\layout Standard
+
+Nothing particular.
+ Ultimate Mixer ? Unix Mixer ? Something like that.
+ Yes, I know it's a dull name.
+\layout Subsection
+
+Why another volume mixer ?
+\layout Standard
+
+I got frustrated with Aumix, and there were no other good alternatives that
+ had terminal/ncurses user interfaces.
+ I myself like to do all my work in a console, and at the same time I usually
+ listen to mp3/nsf music, and need to adjust my soundcard volumes constantly.
+ Aumix acts weird, eats too much CPU cycles etc.
+ If you want to modify it in any sensible way, total rewrite would be the
+ only way.
+\layout Standard
+
+\layout Section
+
+Feedback, patches etc.
+\layout Standard
+
+Send feedback, patches, bug reports and anything related
+to sakari@ionstream.fi.
+
+\layout Subsection
+
+Debugging
+\layout Standard
+
+If you want to debug Umix, configure it with the option 
+\series bold 
+--enable-debug
+\series default 
+.
+ This will enable debugging information printed to stderr.
+ If you want to enable the dummy mixer that has predefined volume levels
+ and other settings, pass the 
+\series bold 
+\emph on 
+--
+\emph default 
+enable-dummy
+\series default 
+ to configure, and use the command line option 
+\series bold 
+-r
+\series default 
+\emph on 
+ dummy.
+\layout Section
+
+Legal information
+\layout Standard
+
+Copyright (C) 2002 Sakari Lehtonen <sakari@ionstream.fi>.
+ This is free software; see the source for copying conditions.
+ There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ USAGE.
+\the_end

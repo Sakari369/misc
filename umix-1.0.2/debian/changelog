@@ -1,0 +1,116 @@
+umix (1.0.2) stable; urgency=low
+  
+  * New upstream version 1.0.2
+
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 30 Aug 2003 18:28:57 +0300
+
+umix (1.0.1) stable; urgency=low
+  
+  * New upstream version 1.0.1
+  * Updated the mixer script
+
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 16 Aug 2003 11:06:02 +0300
+
+umix (1.0) stable; urgency=low
+
+  * New upstream version 1.0
+  * Fixed version number in this (changelog)
+
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 09 Aug 2003 11:23:18 +0300
+
+umix (0.9.1) unstable; urgency=low
+
+  * New upstream version 0.9.1
+  * Updated the description
+  * Fixed a typo (0.8.3) in the previous changelog entry :P
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 13 Jul 2002 03:07:18 +0300
+
+umix (0.9.0) unstable; urgency=low
+
+  * New upstream version 0.9.0
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 08 Jun 2002 12:38:29 +0300
+
+umix (0.8.3) unstable; urgency=low
+
+  * New upstream version 0.8.3
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Thu, 21 Feb 2002 13:42:05 +0200
+
+umix (0.8.2) unstable; urgency=low
+
+  * New upstream version 0.8.2
+  * Updated description
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Fri, 30 Nov 2001 02:59:54 +0200
+
+umix (0.8.1) unstable; urgency=low
+
+  * New upstream version 0.8.1
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Tue, 13 Nov 2001 03:10:15 +0200
+
+umix (0.8.0) unstable; urgency=low
+
+  * New upstream version 0.8.0
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Mon, 05 Nov 2001 08:38:12 +0200
+
+umix (0.7.2) unstable; urgency=low
+
+  * New upstream version 0.7.2
+  * Changed man page to be installed under /prefix/share/man/man1, not 
+    to /prefix/man/man1
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 21 Jul 2001 20:05:12 +0300
+
+umix (0.7.1) unstable; urgency=low
+
+  * New upstream version 0.7.1
+  * Fixed installation of menu
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sat, 23 Jun 2001 22:06:12 +0300
+
+umix (0.7.0) unstable; urgency=low
+
+  * New upstream version 0.7.0
+  * Changed manual installs in 'rules' to use make install.
+  * Changed #!/bin/bash to #!/bin/sh in scripts
+  * Removed CFLAGS definition from rules to prevent messing with the 
+    intended CFLAGS.
+  * Changed directories where umix is installed to variables in 'rules'
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Fri,  8 Jun 2001 22:44:14 +0300
+
+umix (0.6.0) unstable; urgency=low
+
+  * New upstream version 0.6.0
+ 
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sun, 27 May 2001 00:06:12 +0300
+
+umix (0.5) unstable; urgency=low
+
+  * New upstream version 0.5
+
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Mon, 19 Feb 2001 22:27:28 +0200
+
+umix (0.4) unstable; urgency=low
+
+  * Added menu entry
+  * Added postrm and postinst scripts
+  * The script for loading and saving settings is included in the debian
+    source package, install it manually if you want to.
+  * New upstream version 0.4
+
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Sun, 28 Jan 2001 16:11:13 +0200
+
+umix (0.3) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Sakari Lehtonen <sakari@ionstream.fi>  Tue, 23 Jan 2001 16:46:21 +0200
+
+Local variables:
+mode: debian-changelog
+End:
